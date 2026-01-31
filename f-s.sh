@@ -19,11 +19,11 @@ sudo dnf groupupdate -y core
 sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 sudo dnf groupupdate -y sound-and-video
 
-# 5. Встановлення системного та мережевого софту (CCNA/DevOps)
+# 5. Встановлення системного та мережевого софту (Net/DevOps)
 echo "Installing IT tools..."
 sudo dnf install -y \
-    git htop fastfetch vim mc curl wget \
-    wireshark gns3-gui gns3-server \
+    git btop screenfetch fastfetch mc curl wget \
+    wireshark \
     nmap iperf3 mtr nethogs \
     ansible podman distrobox wine \
     virt-manager qemu-kvm libvirt
