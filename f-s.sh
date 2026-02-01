@@ -25,7 +25,7 @@ sudo dnf install -y \
     git btop screenfetch fastfetch mc curl wget \
     wireshark \
     nmap iperf3 mtr nethogs \
-    ansible podman distrobox wine \
+    ansible podman wine \
     virt-manager qemu-kvm libvirt
 
 # 6. Налаштування віртуалізації
@@ -43,11 +43,6 @@ flatpak install -y flathub \
     com.valvesoftware.Steam \
     com.discordapp.Discord \
     org.telegram.desktop \
-    com.usebottles.bottles
-
-# 9. Налаштування Distrobox для Cisco Packet Tracer
-echo "Preparing Distrobox for Packet Tracer..."
-distrobox create -i ubuntu:22.04 -n cisco-lab --yes
 
 echo "------------------------------------------------------"
 echo "SETUP COMPLETE!"
