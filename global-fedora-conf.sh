@@ -3,6 +3,7 @@ if [ "$EUID" -ne 0 ]; then
     echo "Please run as root"
     exit
 fi
+INSTALL_ZSH=true
 
 echo 'max_parallel_downloads=10' >> /etc/dnf/dnf.conf
 echo 'defaultyes=True' >> /etc/dnf/dnf.conf
@@ -13,6 +14,12 @@ echo "Installing Repos"
 sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 sudo dnf config-manager --set-enabled fedora-cisco-openh264
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+if [ "$INSTALL_ZSH" = true ]; then
+    echo "--- [Shell] Installing Zsh ---"
+    dnf install zsh -y
+    # Note: Oh-My-Zsh usually requires user interaction, installed later by user
+fi
 
 echo "Installing Intel tools"
 dnf install intel-media-driver libva-intel-driver -y
