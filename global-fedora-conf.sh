@@ -28,8 +28,6 @@ dnf groupupdate sound-and-video -y
 
 echo "Installing basic tools"
 dnf install -y liberation-fonts fuse fuse-libs wget curl
-wget https://www.google.com/intl/ru/chrome/next-steps.html?statcb=0&installdataindex=empty&defaultbrowser=0#
-sudo rpm -i google-chrome-stable_current_x86_64.rpm
 sudo dnf install -y alien steam wireshark gns3-gui gns3-server
 sudo dnf install -y @virtualization
 sudo dnf install -y gnome-tweaks gnome-extensions-app
