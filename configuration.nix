@@ -16,15 +16,13 @@ boot.loader.efi.canTouchEfiVariables = true;
 
   # Вмикаємо GRUB
   boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    device = "nodev"; # Обов'язково "nodev" для EFI систем
-     enable = true;
-  theme = pkgs.catppuccin-grub.override {
-    flavor = "mocha"; # Налаштування варіації кольору
+    enable = true;          
+    device = "nodev"; 
+    efiSupport = true;      
+    theme = pkgs.catppuccin-grub.override {
+      flavor = "mocha"; 
+    };
   };
-};
-
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
