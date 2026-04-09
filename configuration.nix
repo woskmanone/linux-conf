@@ -112,6 +112,7 @@ programs.winbox = {
 
 #Install zsh.
 programs.zsh = {
+syntaxHighlighting.enable = true;
   enable = true;
 promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
 ohMyZsh = {
@@ -127,7 +128,7 @@ ohMyZsh = {
               nixpkgs.config.permittedInsecurePackages = [
                 "ciscoPacketTracer8-8.2.2"
               ];
-            
+
 
 
 
@@ -166,6 +167,6 @@ ciscoPacketTracer8
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-  system.stateVersion = "25.11"; 
+  system.stateVersion = "25.11";
 
 }
