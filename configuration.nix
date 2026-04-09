@@ -103,12 +103,15 @@ zramSwap = {
     isNormalUser = true;
 shell = pkgs.zsh;
     description = "Maksym Derypasko";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "kvm" "libvirtd" "wireshark" ];
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
     ];
   };
+#Enabling virtualisation
+virtualisation.libvirtd.enable = true;
+programs.virt-manager.enable = true;
 
   # Install firefox.
   programs.firefox.enable = false;
@@ -127,7 +130,6 @@ promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerleve
 ohMyZsh = {
     enable = true;
     plugins = [ "git" "sudo" ]; # додайте потрібні плагіни
-    theme = "powerlevel10k/powerlevel10k";
   };
 };
 
@@ -140,24 +142,32 @@ ohMyZsh = {
 
 
 
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-unzip
-git
-vim
-vscodium
-wget
-fastfetch
-telegram-desktop
-google-chrome
-freeoffice
-zsh-powerlevel10k
-meslo-lgs-nf
-qdirstat
-ciscoPacketTracer8
-  ];
+    #Virtualisation
+    qemu_kvm
+    virt-manager
+    virt-viewer
+    #Networks
+    ciscoPacketTracer8
+    wireshark
+    inetutils
+    #SYS
+    qdirstat
+    unzip
+    wget
+    vim
+    #DEV
+    vscodium
+    git
+    fastfetch
+    #Personal
+    telegram-desktop
+    google-chrome
+    freeoffice
+    zsh-powerlevel10k
+];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -165,7 +175,6 @@ ciscoPacketTracer8
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
