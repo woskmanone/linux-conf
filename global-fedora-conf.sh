@@ -30,7 +30,6 @@ echo "Installing basic tools"
 dnf install -y liberation-fonts fuse fuse-libs wget curl
 sudo dnf install -y alien steam wireshark gns3-gui gns3-server
 sudo dnf install -y @virtualization
-sudo dnf install -y gnome-tweaks gnome-extensions-app
 sudo usermod -aG wireshark $USER
 sudo usermod -aG kvm $USER
 sudo usermod -aG libvirt $USER
