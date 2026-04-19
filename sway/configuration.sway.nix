@@ -169,6 +169,7 @@
     foot             # Легкий Wayland-нативний термінал (обов'язково потрібен для Sway)
     polkit_gnome     # Графічний агент авторизації
     pavucontrol
+    swappy
 
     # Virtualisation
     qemu_kvm
