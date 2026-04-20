@@ -208,6 +208,12 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
     bindsym Print exec grim
+# Виділена область у буфер обміну
+bindsym Shift+Print exec grim -g "$(slurp)" - | swappy -f -
+
+# Виділена область у файл
+bindsym $mod+Shift+Print exec grim -g "$(slurp)" ~/Pictures/$(date +%Y-%m-%d_%H-%m-%S).png
+
 input * {
 xkb_layout "us,ua"
 xkb_options "grp"caps_toggle"
