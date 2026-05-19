@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
@@ -23,8 +19,9 @@ boot.loader.efi.canTouchEfiVariables = true;
       flavor = "mocha"; 
     };
   };
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Use hardened kernel.
+  boot.kernelPackages = pkgs.linuxPackages_hardened;
+
   
   #Enabling auto updating
   system.autoUpgrade.enable = true;
@@ -38,12 +35,8 @@ zramSwap = {
   priority = 100;
 };
 
-  networking.hostName = "nix-hplaptop"; # Define your hostname.
+  networking.hostName = "nix-hplaptop"; # 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -66,18 +59,9 @@ zramSwap = {
     LC_TIME = "uk_UA.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -92,39 +76,24 @@ zramSwap = {
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account
   users.users.derypaskoms = {
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Maksym Derypasko";
-    extraGroups = [ "networkmanager" "wheel" "kvm" "libvirtd" "wireshark" "ubridge" ];
+    extraGroups = [ "networkmanager" "wheel" "kvm" "libvirtd" "wireshark" ];
     packages = with pkgs; [
     #  thunderbird
     ];
   };
 
   # Install firefox.
-  programs.firefox.enable = false;
-  
-  
-#Enabling virtualisation
-virtualisation.libvirtd.enable = true;
-programs.virt-manager.enable = true;
-
-#Install WinBox
-programs.winbox = {
-  enable = true;
-  openFirewall = true; # Відкриває порти для пошуку сусідів (UDP 5678)
-};
+  programs.firefox.enable = true;
 
 #Install zsh.
 programs.zsh = {
@@ -133,7 +102,7 @@ syntaxHighlighting.enable = true;
 promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
 ohMyZsh = {
     enable = true;
-    plugins = [ "git" "sudo" ]; # додайте потрібні плагіни
+    plugins = [ "git" "sudo" ]; 
   };
 };
 
@@ -146,18 +115,17 @@ ohMyZsh = {
 #Install Steam
 programs.steam.enable = true;
 
-#Install Wireshark
-programs.wireshark.enable = true;
-programs.wireshark.package = pkgs.wireshark;
+#Virtualisation and net-tools
+virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark;
+  programs.winbox = {
+    enable = true;
+    openFirewall = true;
+};
 
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #Virtualisation
-    qemu_kvm
-    virt-manager
-    virt-viewer
     #Networks
     ciscoPacketTracer8
     inetutils
@@ -165,26 +133,17 @@ programs.wireshark.package = pkgs.wireshark;
     qdirstat
     unzip
     wget
-    vim
     #DEV
     vscodium
     git
     fastfetch
     btop
     gcc
-    #GNS
-    gns3-gui
-    gns3-server
-    ubridge
-    vpcs
-    putty
     #Personal
     telegram-desktop
-    google-chrome
     freeoffice
-    zsh-powerlevel10k
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
+    librewolf
+    rustdesk
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -198,7 +157,7 @@ programs.wireshark.package = pkgs.wireshark;
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+   services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
