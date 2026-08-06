@@ -1,3 +1,7 @@
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
 { config, pkgs, ... }:
 
 {
@@ -6,11 +10,11 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
+ # Bootloader.
 boot.loader.systemd-boot.enable = false;
 boot.loader.efi.canTouchEfiVariables = true;
 
-  # Enabling GRUB
+  # Вмикаємо GRUB
   boot.loader.grub = {
     enable = true;          
     device = "nodev"; 
@@ -19,24 +23,11 @@ boot.loader.efi.canTouchEfiVariables = true;
       flavor = "mocha"; 
     };
   };
-  # Use hardened kernel.
-  boot.kernelPackages = pkgs.linuxPackages_hardened;
+  # Use latest kernel.
+  boot.kernelPackages = pkgs.linuxPackages;
 
-  
-  #Enabling auto updating
-  system.autoUpgrade.enable = true;
-
-  
-  #Enabling zram
-zramSwap = {
-  enable = true;
-  algorithm = "zstd";
-  memoryPercent = 50;
-  priority = 100;
-};
-
-  networking.hostName = "nix-hplaptop"; # 
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "nix-hplaptop"; # Define your hostname.
+  networking.wireless.enable = true;  
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -59,9 +50,18 @@ zramSwap = {
     LC_TIME = "uk_UA.UTF-8";
   };
 
+  # Disable fucking X11 windowing system.
+  services.xserver.enable = false;
+
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -76,101 +76,84 @@ zramSwap = {
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account
-  users.users.derypaskoms = {
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users."derypaskoms" = {
     isNormalUser = true;
-    shell = pkgs.zsh;
     description = "Maksym Derypasko";
-    extraGroups = [ "networkmanager" "wheel" "kvm" "libvirtd" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
     ];
   };
+  
+   # Install zsh.
+   programs.zsh = {
+   syntaxHighlighting.enable = true;
+     enable = true;
+   promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+   ohMyZsh = {
+       enable = true;
+       plugins = [ "git" "sudo" ];
+  };
+};
 
   # Install firefox.
   programs.firefox.enable = true;
 
-#Install zsh.
-programs.zsh = {
-syntaxHighlighting.enable = true;
-  enable = true;
-promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-ohMyZsh = {
-    enable = true;
-    plugins = [ "git" "sudo" ]; 
-  };
-};
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-              nixpkgs.config.permittedInsecurePackages = [
-                "ciscoPacketTracer8-8.2.2"
-              ];
-#Install Steam
-programs.steam.enable = true;
-
-#Virtualisation and net-tools
-virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true;
-  programs.wireshark.enable = true;
-  programs.wireshark.package = pkgs.wireshark;
-  programs.winbox = {
-    enable = true;
-    openFirewall = true;
-};
-
   environment.systemPackages = with pkgs; [
-    #Networks
-    ciscoPacketTracer8
-    inetutils
-    #SYS
-    qdirstat
-    unzip
-    wget
-    #DEV
-    vscodium
-    git
-    fastfetch
-    btop
-    gcc
-    #Personal
-    telegram-desktop
-    freeoffice
-    librewolf
-    rustdesk
+  #NN
+  qdirstat unzip wget 
+  #Networks
+  inetutils 
+  #Dev
+  vscodium git fastfetch btop gcc 
+  #Personal
+  librewolf telegram-desktop rustdesk 
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
+  # Enable virtualisation
+   virtualisation.libvirtd.enable = true;
+   programs.virt-manager.enable = true;
 
   # Enable the OpenSSH daemon.
    services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  services.tailscale = {
+    # Enable tailscale at startup
+    enable = true;
+  };
 
+  # Install WinBox
+   programs.winbox = {
+   enable = true;
+   openFirewall = true; 
+};
+  # Install Wireshark
+   programs.wireshark.enable = true;
+   programs.wireshark.package = pkgs.wireshark;
+
+  # Open ports in the firewall.
+   networking.firewall.allowedTCPPorts = [ ];
+   networking.firewall.allowedUDPPorts = [ ];
+   networking.firewall.trustedInterfaces = [ "tailscale0" ];
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Did you read the comment?
 
 }
