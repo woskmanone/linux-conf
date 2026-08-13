@@ -11,18 +11,8 @@
     ];
 
    # Bootloader.
-boot.loader.systemd-boot.enable = false;
+boot.loader.systemd-boot.enable = true;
 boot.loader.efi.canTouchEfiVariables = true;
-
-  # Вмикаємо GRUB
-  boot.loader.grub = {
-    enable = true;          
-    device = "nodev"; 
-    efiSupport = true;      
-    theme = pkgs.catppuccin-grub.override {
-      flavor = "mocha"; 
-    };
-  };
 
   # Use LTS kernel.
   boot.kernelPackages = pkgs.linuxPackages;
@@ -31,14 +21,14 @@ boot.loader.efi.canTouchEfiVariables = true;
   zramSwap = {
      enable = true;
      algorithm = "zstd";
-     memoryPercent = 190;
+     memoryPercent = 75;
      priority = 100;
  };
 
-  networking.hostName = "nix-hplaptop";
+  networking.hostName = "router-nix";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  systemd.network.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Kyiv";
@@ -58,22 +48,6 @@ boot.loader.efi.canTouchEfiVariables = true;
     LC_TIME = "uk_UA.UTF-8";
   };
 
-  # Disable fucking X11 windowing system.
-  services.xserver.enable = false;
-
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."derypaskoms" = {
@@ -84,41 +58,28 @@ boot.loader.efi.canTouchEfiVariables = true;
     #  thunderbird
     ];
   };
-  
-   # Install zsh.
-   programs.zsh = {
-   syntaxHighlighting.enable = true;
-     enable = true;
-   promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-   ohMyZsh = {
-       enable = true;
-       plugins = [ "git" "sudo" ];
-  };
-};
- 
- users.users.derypaskoms.shell = pkgs.zsh;
 
-  # Install firefox.
-  programs.firefox.enable = true;
+  services.frr = {
+    enable = true;
+    # Enable the individual routing daemons you need
+    ospfd.enable = true;
+    bgpd.enable = true;
+    eigrpd.enable = true;
+    staticd.enable = true;
+  };
+
+  networking.nftables.enable = true;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = false;
 
   environment.systemPackages = with pkgs; [
   #NN
-  qdirstat unzip wget parted
-  #Networks
-  inetutils ciscoPacketTracer9 nmap dig 
-  #Dev
-  vscodium git fastfetch btop gcc 
-  #Personal
-  librewolf telegram-desktop rustdesk ente-auth pkgs.anki-bin tmux obsidian containerlab virt-viewer translate-shell
+  unzip wget parted inetutils nmap dig git fastfetch btop tmux tcpdump iproute2 ethtool conntrack-tools wireguard-tools dnsmasq
   ];
 
-  # Enable virtualisation and containerization
-   virtualisation.libvirtd.enable = true;
-   programs.virt-manager.enable = true;
-   virtualisation.docker.enable = true;
+  # Enable containerization
+   #virtualisation.podman.enable = true;
 
   # Enable the OpenSSH daemon.
    services.openssh.enable = true;
@@ -128,19 +89,10 @@ boot.loader.efi.canTouchEfiVariables = true;
     enable = true;
   };
 
-  # Install WinBox
-   programs.winbox = {
-   enable = true;
-   openFirewall = true; 
-};
-  # Install Wireshark
-   programs.wireshark.enable = true;
-   programs.wireshark.package = pkgs.wireshark;
-
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ ];
-   networking.firewall.allowedUDPPorts = [ ];
-   networking.firewall.trustedInterfaces = [ "tailscale0" ];
+   #networking.firewall.allowedTCPPorts = [ ];
+   #networking.firewall.allowedUDPPorts = [ ];
+   #networking.firewall.trustedInterfaces = [ "tailscale0" ];
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
