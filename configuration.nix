@@ -108,11 +108,11 @@ boot.loader.efi.canTouchEfiVariables = true;
   #NN
   qdirstat unzip wget parted
   #Networks
-  inetutils ciscoPacketTracer9 nmap dig 
+  inetutils nmap dig 
   #Dev
   vscodium git fastfetch btop gcc 
   #Personal
-  librewolf telegram-desktop rustdesk ente-auth pkgs.anki-bin tmux obsidian containerlab virt-viewer translate-shell
+  librewolf telegram-desktop rustdesk ente-auth anki-bin tmux obsidian containerlab virt-viewer translate-shell
   ];
 
   # Enable virtualisation and containerization
