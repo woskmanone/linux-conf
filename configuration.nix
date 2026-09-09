@@ -106,13 +106,13 @@ boot.loader.efi.canTouchEfiVariables = true;
 
   environment.systemPackages = with pkgs; [
   #NN
-  qdirstat unzip wget parted
+  qdirstat unzip wget parted bzip2
   #Networks
-  inetutils nmap dig 
+  inetutils nmap dig
   #Dev
   vscodium git fastfetch btop gcc 
   #Personal
-  librewolf telegram-desktop rustdesk ente-auth anki-bin tmux obsidian containerlab virt-viewer translate-shell
+  librewolf telegram-desktop rustdesk ente-auth pkgs.anki-bin tmux obsidian containerlab virt-viewer translate-shell chromium rclone onlyoffice-desktopeditors
   ];
 
   # Enable virtualisation and containerization
