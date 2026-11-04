@@ -65,7 +65,7 @@ boot.loader.efi.canTouchEfiVariables = true;
   users.users."derypaskoms" = {
     isNormalUser = true;
     description = "Maksym Derypasko";
-    extraGroups = [ "networkmanager" "wheel" "libvirt" "wireshark" "kvm" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "wireshark" "kvm" "docker" ];
     packages = with pkgs; [
     ];
   };
@@ -97,7 +97,7 @@ boot.loader.efi.canTouchEfiVariables = true;
   #Dev
   vscodium git fastfetch btop gcc 
   #Personal
-  librewolf telegram-desktop rustdesk ente-auth pkgs.anki-bin tmux containerlab virt-viewer translate-shell chromium rclone
+  librewolf telegram-desktop ente-auth pkgs.anki-bin tmux containerlab virt-viewer translate-shell chromium rclone resources cisco-packet-tracer_9 anydesk remmina unar yt-dlp ffmpeg
   ];
 
   # Enable virtualisation and containerization
